@@ -15,39 +15,75 @@
     </head>
     <body>
         <table></table>
+        <aside> 
+            <select>
+                <option value="">Seleciona... </option>
+                <option value="ALLARD, J.">José Allard</option>
+                <option value="ALVAREZ, P.">Pedro Álvarez </option>
+                <option value="CARO, I.">Iván Caro </option>
+                <option value="DURAN, A.">Alejandro Durán </option>
+                <option value="FIGUEROA, B.">Bernardita Figueroa </option>
+                <option value="GONZÁLEZ, A.">Alberto Gonzáles</option>
+                <option value="MANNS, P.">Patricia Manns </option>
+                <option value="MOLLENHAUER, K.">Katherine Mollenhhauer </option>
+                <option value="MORENO, P.">Paola Moreno</option>
+                <option value="RAMIREZ, R.">Rodrigo Ramirez </option>
+                <option value="ULIBARRI, X.">Ximena Ulibarri </option>
+                <option value="VIVANCO, T.">Tomás Vivanco </option>
+            </select>
+            <ol> </ol>
+        </aside>
     <script>
             const visualizacion = document.querySelector("table");
+            var data;
             function plecas(numero){
                 var visual = "";
                 for(let x = 0; x < numero; x++){
-                    visual = visual+"|";
+                    visual = visual+"✨";
                 }
+                                //img.png insertar una imagen
                 return visual;
             }
             async function datos() {
                 const consulta = await fetch("https://raw.githubusercontent.com/profesorfaco/opr/main/clase-05/datos.json");
-                const data = await consulta.json();
-                // ya tengo los datos de proyectos con nota 7
+                
+                data = await consulta.json();
+                        // ya tengo los datos de proyectos con nota 7
                 console.log(data);
-                // ahora armo un arreglo que tengan sólo nombres de Profes'
+                         // ahora armo un arreglo que tengan sólo nombres de Profes'
                 var profes = [];
                 data.forEach((x) => {profes.push(x.tutor)});
                 console.log(profes);
-                // https://gist.github.com/ralphcrisostomo/3141412?permalink_comment_id=2315571#gistcomment-2315571 
-                // puedo contar las veces que se repiten los nombres de cada Profe'
+                        // https://gist.github.com/ralphcrisostomo/3141412?permalink_comment_id=2315571#gistcomment-2315571 
+                        // puedo contar las veces que se repiten los nombres de cada Profe'
                 var conteo = profes.reduce((a,b)=>((a[a.findIndex(d=>d.profesor===b)]||a[a.push({profesor:b,veces:0})-1]).veces++,a),[]);
                 console.log(conteo);
-                // creo otra variable, a la que empujaré nombres de Profes' con una condición
+                        // creo otra variable, a la que empujaré nombres de Profes' con una condición
                 var nombres = [];
                 conteo.forEach((x) => {
                     visualizacion.innerHTML+=`<tr><td>${x.profesor}</td><td>${plecas(x.veces)}</td></tr>`;
                     if (x.veces > 3) { nombres.push(x.profesor) }
                 });
-                // revisemos el siguiente dato en la consola para avanzar
+                        // revisemos el siguiente dato en la consola para avanzar
                 console.log("HAN GUIADO A MÁS DE TRES NOTAS SIETE: " + nombres);
-            }
+
+                document.querySelector("select").addEventListener("change", function () {document.querySelector("ol").innerHTML = estudiantes(this.value);
+                });                
+                }
+            
             datos().catch((error) => console.error(error));
+
+            function estudiantes(p){
+                var listado = "";
+                data.forEach((x)=> {
+                    if(x.tutor ==p) {
+                        //listado += "<li>"+x.student+"</li>";
+                        listado += `<li>${x.student}</li>`
+                        }}  );
+                return listado; 
+                }
         </script>
     </body>
 </html>
+
 
